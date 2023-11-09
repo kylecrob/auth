@@ -4,15 +4,20 @@ import CustomInput from "../../components/CustomInput/CustomInput";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import SocialSignInButtons from "../../components/SocialSignInButtons/SocialSignInButtons";
 import {useNavigation} from "@react-navigation/native";
+import store from "../../store";
+import {setUsername, setEmail, setPassword} from "../../actions";
 
 const SignUpScreen = () => {
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [passwordRepeat, setPasswordRepeat] = useState('');
+    const [username, setUsernameLocal] = useState('');
+    const [email, setEmailLocal] = useState('');
+    const [password, setPasswordLocal] = useState('');
+    const [passwordRepeat, setPasswordRepeatLocal] = useState('');
     const navigation = useNavigation();
     const onRegisterPressed = () => {
-        navigation.navigate("ConfirmEmail");
+        store.dispatch(setUsername(username));
+        store.dispatch(setEmail(email));
+        store.dispatch(setPassword(password));
+        navigation.navigate("SignIn");
     }
 
     const onSignInPressed = () => {
@@ -25,6 +30,10 @@ const SignUpScreen = () => {
         console.warn("Privacy Policy")
     }
 
+    const unsubscribe = store.subscribe(() => {
+        console.log("Store changed!", store.getState());
+    })
+
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.root}>
@@ -33,28 +42,28 @@ const SignUpScreen = () => {
                 <CustomInput
                     placeholder={"Username"}
                     value={username}
-                    setValue={setUsername}
+                    setValue={setUsernameLocal}
                     secureTextEntry={false}
                 />
 
                 <CustomInput
                     placeholder={"Email"}
                     value={email}
-                    setValue={setEmail}
+                    setValue={setEmailLocal}
                     secureTextEntry={false}
                 />
 
                 <CustomInput
                     placeholder={"Password"}
                     value={password}
-                    setValue={setPassword}
+                    setValue={setPasswordLocal}
                     secureTextEntry={true}
                 />
 
                 <CustomInput
                     placeholder={"Repeat Password"}
                     value={passwordRepeat}
-                    setValue={setPasswordRepeat}
+                    setValue={setPasswordRepeatLocal}
                     secureTextEntry={true}
                 />
 

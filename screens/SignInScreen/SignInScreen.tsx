@@ -1,10 +1,11 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Image, StyleSheet, useWindowDimensions, ScrollView} from 'react-native';
 import Logo from "../../assets/logo.png";
 import CustomInput from "../../components/CustomInput/CustomInput";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import SocialSignInButtons from "../../components/SocialSignInButtons";
 import {useNavigation} from "@react-navigation/native";
+import {useSelector} from 'react-redux';
 
 const SignInScreen = () => {
     const [username, setUsername] = useState('');
@@ -16,6 +17,15 @@ const SignInScreen = () => {
 
         navigation.navigate('Home');
     }
+
+    const reduxUsername = useSelector((state: { username: string; }) => state.username);
+    const reduxPassword = useSelector((state: { password: string; }) => state.password);
+
+    useEffect(() => {
+        setUsername(reduxUsername);
+        setPassword(reduxPassword);
+    }, [reduxUsername, reduxPassword]);
+
     const onForgotPasswordPressed = () => {
         navigation.navigate('ForgotPassword')
     }
@@ -43,7 +53,7 @@ const SignInScreen = () => {
                     placeholder={"Password"}
                     value={password}
                     setValue={setPassword}
-                    secureTextEntry={true}
+                    // secureTextEntry={true}
                 />
 
                 <CustomButton
